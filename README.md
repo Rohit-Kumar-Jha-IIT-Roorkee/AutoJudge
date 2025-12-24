@@ -220,32 +220,33 @@ Both models operate independently and are combined at inference time.
 AutoJudge_Final/
 │
 ├── app/
-│ ├── app.py
-│ ├── templates/
-│ │ └── index.html
-│ └── static/
+│   ├── app.py
+│   ├── templates/
+│   │   └── index.html
+│   └── static/
 │
 ├── artifacts/
-│ ├── feature_pipeline_classification.pkl
-│ ├── logistic_regression_baseline.pkl
-│ ├── tfidf_cf.pkl
-│ └── cf_rating_model.pkl
+│   ├── feature_pipeline_classification.pkl
+│   ├── logistic_regression_baseline.pkl
+│   ├── tfidf_cf.pkl
+│   └── cf_rating_model.pkl
 │
 ├── data/
-│ ├── raw/
-│ └── processed/
+│   ├── raw/
+│   └── processed/
 │
 ├── src/
-│ ├── data_generation/
-│ └── models/
-│ ├── classification/
-│ └── regression/
+│   ├── data_generation/
+│   └── models/
+│       ├── classification/
+│       └── regression/
 │
 ├── notebooks/
-│ └── eda.ipynb
+│   └── eda.ipynb
 │
 ├── README.md
 └── requirements.txt
+
 
 
 ---
