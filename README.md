@@ -215,43 +215,9 @@ Both models operate independently and are combined at inference time.
 
 ---
 
-## 12. Project Structure
-
-AutoJudge_Final/
-│
-├── app/
-│   ├── app.py
-│   ├── templates/
-│   │   └── index.html
-│   └── static/
-│
-├── artifacts/
-│   ├── feature_pipeline_classification.pkl
-│   ├── logistic_regression_baseline.pkl
-│   ├── tfidf_cf.pkl
-│   └── cf_rating_model.pkl
-│
-├── data/
-│   ├── raw/
-│   └── processed/
-│
-├── src/
-│   ├── data_generation/
-│   └── models/
-│       ├── classification/
-│       └── regression/
-│
-├── notebooks/
-│   └── eda.ipynb
-│
-├── README.md
-└── requirements.txt
-
-
-
 ---
 
-## 13. Limitations & Future Work
+## 12. Limitations & Future Work
 
 **Limitations:**
 
@@ -266,7 +232,7 @@ AutoJudge_Final/
 
 ---
 
-## 14. Conclusion
+## 13. Conclusion
 
 AutoJudge successfully implements both classification and regression for programming problem difficulty prediction using classical machine learning techniques.
 
@@ -274,16 +240,16 @@ The system is fully functional, empirically evaluated, and strictly adheres to t
 
 ---
 
-## 15. How to Run the Project
+## 14. How to Run the Project
 
-### 15.1 Prerequisites
+### 14.1 Prerequisites
 
 - Python 3.9 or higher
 - pip (Python package manager)
 
 ---
 
-### 15.2 Setup
+### 14.2 Setup
 
 Clone the repository and navigate to the project root:
 
@@ -316,7 +282,7 @@ pip install -r requirements.txt
 
 ---
 
-### 15.3 Run the Web Application
+### 14.3 Run the Web Application
 
 From the project root, run:
 
@@ -330,7 +296,7 @@ http://127.0.0.1:5000/
 
 ---
 
-### 15.4 Usage
+### 14.4 Usage
 
 1. Paste the problem description  
 2. Paste the input format  
