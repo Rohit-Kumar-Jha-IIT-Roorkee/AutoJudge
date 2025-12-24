@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoJudge - Problem Difficulty Predictor</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div id="body">
+
+    <!-- Header -->
+    <div id="header">
+        <div class="lang-chooser">
+            <a href="#">Language: en</a>
+        </div>
+
+        <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">
+            <a href="/" style="text-decoration: none; color: black;">AutoJudge</a>
+        </div>
+
+        <div class="menu-box">
+            <ul class="menu-list">
+                <li><a href="/">HOME</a></li>
+                <li><a href="#">CONTESTS</a></li>
+                <li><a href="#">GYM</a></li>
+                <li><a href="#">PROBLEMSET</a></li>
+                <li><a href="#">GROUPS</a></li>
+                <li><a href="#">RATING</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="page-content">
+
+        <div class="roundbox">
+            <div class="caption titled">→ Submit Problem for Analysis</div>
+
+            <div class="content">
+                <div class="form-container">
+
+                    <div class="field-name">Problem Description</div>
+                    <textarea id="desc" placeholder="Paste problem statement here..."></textarea>
+
+                    <div class="field-name">Input Description</div>
+                    <textarea id="input_desc" placeholder="Paste input format..."></textarea>
+
+                    <div class="field-name">Output Description</div>
+                    <textarea id="output_desc" placeholder="Paste output format..."></textarea>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="submit-btn" onclick="predictDifficulty()">
+                            Predict Difficulty
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Box -->
+        <div class="roundbox" id="result-box" style="margin-top: 20px; display: none;">
+            <div class="caption titled">→ Verdict</div>
+
+            <div class="content" style="text-align: center; padding: 20px;">
+
+                <div class="verdict-label">Difficulty Class</div>
+                <div id="pred-class" class="verdict-value">—</div>
+
+                <div class="verdict-label" style="margin-top: 15px;">
+                    Predicted Rating
+                </div>
+                <div id="pred-rating" class="verdict-value">—</div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div id="footer">
+        AutoJudge System © 2025 <br>
+        Powered by Classification & Regression Models
+    </div>
+
+</div>
+
+<script>
+async function predictDifficulty() {
+
+    const desc = document.getElementById("desc").value;
+    const inputDesc = document.getElementById("input_desc").value;
+    const outputDesc = document.getElementById("output_desc").value;
+
+    if ((desc + inputDesc + outputDesc).trim().length === 0) {
+        alert("Please enter some problem text!");
+        return;
+    }
+
+    const btn = document.querySelector(".submit-btn");
+    btn.disabled = true;
+    btn.innerText = "Running on tests...";
+
+    try {
+        const response = await fetch("/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                problem_desc: desc,
+                input_desc: inputDesc,
+                output_desc: outputDesc
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            alert("Error: " + data.error);
+            return;
+        }
+
+        document.getElementById("result-box").style.display = "block";
+
+        // ----- Classification -----
+        const classEl = document.getElementById("pred-class");
+        classEl.innerText = data.difficulty_class;
+
+        if (data.difficulty_class === "Easy") {
+            classEl.style.color = "#0a8f00";
+        } else if (data.difficulty_class === "Medium") {
+            classEl.style.color = "#0000ff";
+        } else {
+            classEl.style.color = "#ff0000";
+        }
+
+        // ----- Regression -----
+        document.getElementById("pred-rating").innerText =
+            data.difficulty_score;
+
+    } catch (err) {
+        alert("Network Error");
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "Predict Difficulty";
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+/* ========== GLOBAL ========== */
+body {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    background-color: #f6f7f8;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+#body {
+    width: 980px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 10px;
+}
+
+/* ========== HEADER ========== */
+#header {
+    margin-bottom: 10px;
+}
+
+.lang-chooser {
+    text-align: right;
+    font-size: 12px;
+    color: #555;
+}
+
+.menu-box {
+    background: #333;
+    margin-top: 8px;
+}
+
+.menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.menu-list li {
+    margin: 0;
+}
+
+.menu-list li a {
+    display: block;
+    padding: 6px 12px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.menu-list li a:hover {
+    background: #444;
+}
+
+/* ========== ROUND BOX (CF CORE) ========== */
+.roundbox {
+    border: 1px solid #d4d4d4;
+    background: #fff;
+    margin-bottom: 15px;
+}
+
+.caption.titled {
+    font-weight: bold;
+    font-size: 14px;
+    color: #3b5998;
+    padding: 6px 8px;
+    border-bottom: 1px solid #e0e0e0;
+    background: #f7f7f7;
+}
+
+.content {
+    padding: 10px;
+}
+
+/* ========== FORM ========== */
+.field-name {
+    font-weight: bold;
+    margin: 8px 0 4px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 120px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 13px;
+    padding: 6px;
+    border: 1px solid #aaa;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+/* ========== BUTTON ========== */
+.submit-btn {
+    padding: 5px 14px;
+    font-size: 13px;
+    border: 1px solid #aaa;
+    background: #f0f0f0;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: #e6e6e6;
+}
+
+.submit-btn:disabled {
+    color: #777;
+    background: #ddd;
+    cursor: default;
+}
+
+/* ========== VERDICT ========== */
+.verdict-label {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.verdict-value {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* ========== FOOTER ========== */
+#footer {
+    text-align: center;
+    font-size: 12px;
+    color: #777;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
