@@ -1,307 +1,357 @@
-AutoJudge – Predicting Programming Problem Difficulty
-1. Project Overview
+# AutoJudge – Predicting Programming Problem Difficulty
 
-AutoJudge is a machine learning system that predicts the difficulty of programming problems based solely on their textual descriptions.
-The system outputs:
+## 1. Project Overview
 
-A difficulty class: Easy / Medium / Hard
+AutoJudge is a machine learning system that predicts the difficulty of programming problems using only textual information.
 
-A numerical difficulty score aligned with Codeforces-style ratings (e.g., 800–3000)
+The system produces:
 
-The project fulfills the requirements of the problem statement by implementing both classification and regression models, along with proper evaluation and a web-based interface.
+- A difficulty class: Attachment  Easy / Medium / Hard  
+- A numerical difficulty score aligned with Codeforces-style ratings (e.g., 800–3000)
 
-All models use classical machine learning techniques and classical text feature extraction methods.
-No deep learning models are used anywhere in the pipeline.
+The project strictly follows the problem statement by implementing both classification and regression models, along with proper evaluation and a working web interface.
 
-2. Problem Statement Requirements
+All models use **classical machine learning** and **classical text feature extraction techniques**.  
+**No deep learning models are used anywhere in the pipeline.**
+
+---
+
+## 2. Problem Statement Requirements
 
 The problem statement required:
 
-Difficulty classification
+- Difficulty classification  
+- Difficulty score prediction  
+- Proper model evaluation  
+- A web interface for predictions  
 
-Difficulty score prediction
+✅ **All requirements have been fully implemented using classical ML methods.**
 
-Model evaluation
+---
 
-A web interface for predictions
+## 3. Datasets Used
 
-All of the above have been implemented using classical machine learning models, strictly adhering to the given constraints.
+### 3.1 Initial Provided Dataset
 
-3. Datasets Used
-3.1 Initial Provided Dataset
+The initially provided dataset contained programming problem descriptions with limited difficulty-related information.
 
-The initially provided dataset contained programming problem descriptions along with limited difficulty-related information.
+**Issues observed during experimentation:**
 
-Issues observed during experimentation:
+- No explicit difficulty class labels  
+- Difficulty scores clustered in a narrow range  
+- Regression models collapsed to near-constant predictions  
+- Classification performance was unstable due to weak label signals  
 
-No explicit difficulty class labels
+Despite extensive experimentation, this dataset lacked sufficient variance for reliable difficulty prediction.
 
-Difficulty scores clustered in a narrow range
+➡️ These experiments are retained for transparency and comparison.
 
-Regression models collapsed to near-constant predictions
+---
 
-Classification performance was unstable due to weak label signals
+### 3.2 Improved Dataset (Codeforces-Based)
 
-Despite extensive feature engineering and model tuning, this dataset did not provide sufficient variance for reliable difficulty prediction.
-
-The dataset and experiments from this phase are retained for transparency and comparison.
-
-3.2 Improved Dataset (Codeforces-Based)
-
-To address the above limitations, a larger and more diverse dataset was constructed using Codeforces problem data.
+To address the limitations above, a larger and more diverse dataset was constructed using Codeforces problem data.
 
 Each problem includes:
 
-Problem description
-
-Input format
-
-Output format
-
-Official Codeforces difficulty rating
+- Problem description  
+- Input format  
+- Output format  
+- Official Codeforces difficulty rating  
 
 Rows with missing input or output descriptions were removed to ensure data quality.
 
-4. Difficulty Class Generation
+---
 
-The Codeforces rating was used to generate difficulty class labels only during dataset construction.
+## 4. Difficulty Class Generation
 
-Rating Range	Difficulty Class
-≤ 1200	Easy
-1200–1799	Medium
-≥ 1800	Hard
+Difficulty classes were generated only during dataset construction using Codeforces ratings:
 
-During classification model training, the rating column is not used, preventing any form of label leakage.
+| Rating Range | Difficulty Class |
+|-------------|------------------|
+| ≤ 1200      | Easy             |
+| 1200–1799   | Medium           |
+| ≥ 1800      | Hard             |
 
-5. Exploratory Data Analysis (EDA)
+⚠️ During classification training, the rating column is **not used**, preventing any label leakage.
 
-Key observations from EDA:
+---
 
-Strong class imbalance (Hard problems dominate)
+## 5. Exploratory Data Analysis (EDA)
 
-Significant variation in text length and vocabulary
+**Key observations from EDA:**
 
-Difficulty correlates with textual and structural complexity
+- Strong class imbalance (Hard problems dominate)  
+- Significant variation in text length and vocabulary  
+- Difficulty correlates with textual and structural complexity  
 
-Class imbalance handling strategies were therefore required.
+These observations motivated the use of class-weighted models.
 
-A detailed exploratory analysis, including class distribution plots and text statistics, can be found in
-notebooks/eda.ipynb, which provides additional visualization and clarification of these observations.
+📊 A detailed EDA with visualizations is available in:  
+`notebooks/eda.ipynb`
 
-6. Feature Engineering
+---
 
-The project uses classical text feature extraction techniques, including:
+## 6. Feature Engineering
 
-TF-IDF vectorization
+The project uses **classical text feature extraction techniques**, including:
 
-Unigrams and bigrams (n-grams)
+- TF-IDF vectorization  
+- Unigrams and bigrams (n-grams)  
+- Dimensionality reduction using Truncated SVD  
 
-Dimensionality reduction using Truncated SVD
+No pretrained embeddings, neural networks, or transformers are used.
 
-No pretrained embeddings, transformers, or neural networks are used.
+---
 
-7. Classification Models
-7.1 Models Evaluated
+## 7. Classification Models
 
-Logistic Regression (class-weighted)
+### 7.1 Models Evaluated
 
-Linear SVM (class-weighted)
+- Logistic Regression (class-weighted)  
+- Linear SVM (class-weighted)  
+- XGBoost Classifier  
 
-XGBoost Classifier
+---
 
-7.2 Handling Class Imbalance
+### 7.2 Handling Class Imbalance
 
-The dataset exhibits significant class imbalance, particularly with a higher proportion of Hard problems.
+The dataset shows significant class imbalance, especially for Hard problems.
 
-The following strategies were explored:
+**Strategies explored:**
 
-Class weighting in linear models
+- Class weighting in linear models  
+- SMOTE-based oversampling during experimentation  
 
-SMOTE-based oversampling during experimentation
+Although SMOTE was evaluated, it did not provide consistent improvements.  
+The final system therefore relies on **class-weighted learning**, not synthetic oversampling.
 
-While SMOTE was evaluated, it did not lead to consistent improvements in validation performance.
-Therefore, the final classification model relies on class-weighted learning rather than synthetic oversampling.
+---
 
-7.3 Evaluation Metrics
+### 7.3 Evaluation Metrics
 
-Accuracy
+- Accuracy  
+- Precision, Recall, F1-score  
+- Confusion Matrix  
 
-Precision, Recall, F1-score
+---
 
-Confusion Matrix
+### 7.4 Final Classification Model
 
-7.4 Final Classification Model
+**Logistic Regression (class-weighted)** was selected due to:
 
-Logistic Regression (class-weighted) was selected as the final classifier due to:
+- Stable performance across all classes  
+- Better balance between precision and recall  
+- Lower overfitting risk compared to tree-based models  
 
-Stable performance across all classes
+---
 
-Better balance between precision and recall
+## 8. Regression Models (Difficulty Score Prediction)
 
-Lower overfitting risk compared to tree-based models
-
-8. Regression Models (Difficulty Score Prediction)
-8.1 Objective
+### 8.1 Objective
 
 Predict a numerical difficulty score aligned with Codeforces ratings using text-only information.
 
-8.2 Models Evaluated
+---
 
-Linear Regression
+### 8.2 Models Evaluated
 
-Gradient Boosting Regressor
+- Linear Regression  
+- Gradient Boosting Regressor  
+- XGBoost Regressor  
+- Random Forest Regressor (with hyperparameter tuning)  
 
-XGBoost Regressor
+---
 
-Random Forest Regressor (with hyperparameter tuning)
+### 8.3 Evaluation Metrics
 
-8.3 Evaluation Metrics
+- MAE (Mean Absolute Error)  
+- MSE (Mean Squared Error)  
+- RMSE (Root Mean Squared Error)  
 
-MAE (Mean Absolute Error)
+---
 
-MSE (Mean Squared Error)
-
-RMSE (Root Mean Squared Error)
-
-8.4 Final Regression Model
+### 8.4 Final Regression Model
 
 The final regression model achieves:
 
-MAE ≈ 470 rating points
+- **MAE ≈ 470 rating points**
 
 Given the subjective and noisy nature of difficulty ratings, this performance is considered reasonable for text-based prediction.
 
-9. Final System Architecture
+---
+
+## 9. Final System Architecture
 
 The system uses two independent models:
 
-Regression model predicts a numerical difficulty rating
+- **Regression model** → predicts numerical difficulty rating  
+- **Classification model** → predicts Easy / Medium / Hard directly from text  
 
-Classification model predicts Easy / Medium / Hard directly from text
+Both models operate independently and are combined at inference time.
 
-The outputs are combined at inference time without threshold-based post-processing.
+---
 
-10. Web Application
+## 10. Web Application
 
-Flask backend
+- Flask backend  
+- HTML/CSS frontend inspired by Codeforces UI  
+- Real-time predictions  
 
-HTML/CSS frontend inspired by Codeforces UI
+**User inputs:**
 
-Real-time predictions
+- Problem description  
+- Input format  
+- Output format  
 
-User inputs:
+---
 
-Problem description
+## 11. Results Summary
 
-Input format
+| Task           | Model                     | Key Metric        |
+|---------------|---------------------------|-------------------|
+| Classification| Logistic Regression        | ~60% accuracy    |
+| Regression    | Codeforces Rating Model    | MAE ≈ 470        |
 
-Output format
+---
 
-11. Results Summary
-Task	Model	Key Metric
-Classification	Logistic Regression	~60% accuracy
-Regression	Codeforces Rating Model	MAE ≈ 470
-12. Project Structure
+## 12. Project Structure
+
 AutoJudge_Final/
 │
 ├── app/
-│   ├── app.py
-│   ├── templates/
-│   └── static/
-│
-├── data/
-│   ├── raw/
-│   └── processed/
-│
-├── src/
-│   ├── data_generation/
-│   └── models/
+│ ├── app.py
+│ ├── templates/
+│ │ └── index.html
+│ └── static/
 │
 ├── artifacts/
-│   ├── feature_pipeline_classification.pkl
-│   ├── logistic_regression_baseline.pkl
-│   ├── tfidf_cf.pkl
-│   └── cf_rating_model.pkl
+│ ├── feature_pipeline_classification.pkl
+│ ├── logistic_regression_baseline.pkl
+│ ├── tfidf_cf.pkl
+│ └── cf_rating_model.pkl
+│
+├── data/
+│ ├── raw/
+│ └── processed/
+│
+├── src/
+│ ├── data_generation/
+│ └── models/
+│ ├── classification/
+│ └── regression/
 │
 ├── notebooks/
+│ └── eda.ipynb
+│
 ├── README.md
 └── requirements.txt
 
-13. Limitations & Future Work
 
-Class imbalance remains a challenge
+---
 
-Difficulty prediction is inherently subjective
+## 13. Limitations & Future Work
 
-Possible improvements:
+**Limitations:**
 
-Incorporating symbolic features (constraints, limits)
+- Class imbalance remains a challenge  
+- Difficulty prediction is inherently subjective  
 
-Larger curated datasets
+**Possible improvements:**
 
-Multi-task learning approaches
+- Incorporating symbolic features (constraints, limits)  
+- Larger curated datasets  
+- Multi-task learning approaches  
 
-14. Conclusion
+---
 
-AutoJudge successfully implements both classification and regression models for programming problem difficulty prediction using classical machine learning techniques.
-The system is fully functional, empirically evaluated, and strictly adheres to the problem constraints.
+## 14. Conclusion
 
-15. How to Run the Project
-15.1 Prerequisites
+AutoJudge successfully implements both classification and regression for programming problem difficulty prediction using classical machine learning techniques.
 
-Python 3.9+
+The system is fully functional, empirically evaluated, and strictly adheres to the given constraints.
 
-pip
+---
 
-15.2 Setup
+## 15. How to Run the Project
+
+### 15.1 Prerequisites
+
+- Python 3.9 or higher
+- pip (Python package manager)
+
+---
+
+### 15.2 Setup
 
 Clone the repository and navigate to the project root:
 
 git clone <repository-url>
 cd AutoJudge_Final
 
+---
 
-(Optional but recommended) Create a virtual environment:
-
-Windows
+### Create Virtual Environment
 
 python -m venv venv
+
+---
+
+### Activate Virtual Environment (Windows)
+
 venv\Scripts\activate
 
+---
 
-Linux / macOS
+### Activate Virtual Environment (Linux / macOS)
 
-python3 -m venv venv
 source venv/bin/activate
 
+---
 
-Install dependencies:
+### Install Dependencies
 
 pip install -r requirements.txt
 
-15.3 Run the Web Application
+---
 
-From the project root:
+### 15.3 Run the Web Application
+
+From the project root, run:
 
 python app/app.py
 
+---
 
-The application will be available at:
+### Open the Application in Browser
 
 http://127.0.0.1:5000/
 
-15.4 Usage
+---
 
-Paste the problem description
+### 15.4 Usage
 
-Paste the input format
+1. Paste the problem description  
+2. Paste the input format  
+3. Paste the output format  
+4. Click **Predict Difficulty**
 
-Paste the output format
+---
 
-Click Predict Difficulty
+### Output Provided
 
-The system outputs:
+- Difficulty Class: Easy / Medium / Hard  
+- Predicted Rating: Codeforces-style numerical rating (e.g., 800–3000)
 
-Difficulty class (Easy / Medium / Hard)
+---
 
-Predicted Codeforces-style rating
+### Notes
+
+- The application relies on pretrained classical machine learning models stored in the `artifacts/` directory.
+- These `.pkl` files are required for inference and are intentionally included in the repository.
+- No deep learning models, transformers, or neural networks are used anywhere in the project.
+
+---
+
+### End of README
+
